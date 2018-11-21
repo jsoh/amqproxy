@@ -44,3 +44,24 @@ As an example:
 
 Then from your AMQP client connect to localhost:5673, it will resuse connections made to the upstream. The AMQP_URL should only include protocol, hostname and port (only if non default, 5672 for AMQP and 5671 for AMQPS). Any username, password or vhost will be ignored, and it's up to the client to provide them.
 
+## Docker Instructions
+
+To run AMQP proxy within a container, build the docker image using the Dockerfile. 
+
+Example: 
+
+`docker build -t amqproxy .`
+
+This container accepts the same parameters, shown in the usage example above, as environment variables which can override the default values below:
+
+```
+ENV LISTEN_ADDRESS=0.0.0.0
+ENV LISTEN_PORT=5673
+ENV AMQP_URL=amqp://127.0.0.1:5672
+```
+
+The default `LISTEN_ADDRESS` value is set to `0.0.0.0` to accept connections from external sources.
+
+Example using the docker image where `[RABBITMQ_SERVICE_HOST]` is the host name or IP address of the host where the RabbitMQ service is running:
+
+`docker run -it -d -e "AMQP_URL=amqp://[RABBITMQ_SERVICE_HOST]:5672" amqproxy`
